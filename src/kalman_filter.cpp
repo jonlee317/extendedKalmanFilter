@@ -46,8 +46,22 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
+  double rho = sqrt(x_[0]*x_[0]+x_[1]*x_[1]);
+  double theta;
+  double rho_dot;
+  VectorXd z_pred = VectorXd(3);
 
-  VectorXd y = z - H_*x_;  // H*x is the measurement prediction of z
+  if (rho > 0) {
+    theta = atan(x_[1]/x_[0]);
+    rho_dot = ((x_[0]*x_[2]+x_[1]*x_[3])/rho);
+  } else {
+    theta = 0;
+    rho_dot = 0;
+  }
+
+  z_pred << rho, theta, rho_dot;
+
+  VectorXd y = z - z_pred;  // z_pred is the measurement prediction of z
   MatrixXd S = H_*P_*H_.transpose() + R_;
   MatrixXd K = P_*H_.transpose()*S.inverse();
 

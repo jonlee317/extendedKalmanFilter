@@ -23,12 +23,12 @@ FusionEKF::FusionEKF() {
 
   // initializing matrices
   R_laser_ = MatrixXd(2, 2);
-  R_laser_ << 0.015, 0,
+  R_laser_ << 0.0187, 0,
 			  0, 0.02;
   R_radar_ = MatrixXd(3, 3);
-  R_radar_ << 0.2, 0, 0,
-			       0, 0.2, 0,
-              0, 0, 0.045;
+  R_radar_ << 0.1, 0, 0,
+			       0, 0.1, 0,
+              0, 0, 0.05;
   H_laser_ = MatrixXd(2, 4);
   H_laser_ << 1, 0, 0, 0,
 			  0, 1, 0, 0;
@@ -39,7 +39,6 @@ FusionEKF::FusionEKF() {
     * Finish initializing the FusionEKF.
   */
   VectorXd x_in = VectorXd(4);
-	x_in << 0, 0, 0, 0;
 
 	MatrixXd P = MatrixXd(4, 4);
 	P << 1, 0, 0, 0,

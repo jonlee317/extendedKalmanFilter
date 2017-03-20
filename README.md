@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Extended Kalman Filter Project Starter Code
 Self-Driving Car Engineer Nanodegree Program
 
@@ -88,3 +89,7 @@ that's just a guess.
 
 One last note here: regardless of the IDE used, every submitted project must
 still be compilable with cmake and make.
+=======
+# extendedKalmanFilter
+SDCND Extended Kalman Filter Project
+>>>>>>> 18a52649b2b1f47c1e69ed3de02fb87ac2655d58
