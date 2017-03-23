@@ -5,29 +5,28 @@ Tools::Tools() {}
 
 Tools::~Tools() {}
 
-VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
-                              const vector<VectorXd> &ground_truth) {
+VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations, const vector<VectorXd> &ground_truth) {
   /**
   TODO:
     * Calculate the RMSE here.
   */
   VectorXd rmse(4);
   rmse << 0,0,0,0;
-
-  if (estimations.size() != ground_truth.size() || estimations.size() == 0) {
+  unsigned int est_size = estimations.size();
+  if (estimations.size() != ground_truth.size() || est_size == 0) {
     cout << "error, unequal size or no data";
     return rmse;
   }
 
-  for (int i=0; i<estimations.size(); i++) {
+  for (unsigned int i=0; i<est_size; i++) {
     VectorXd diff = estimations[i] - ground_truth[i];
     VectorXd diff_sq = diff.array()*diff.array();
     rmse += diff_sq;
   }
 
-  rmse /= estimations.size();
+  rmse = rmse/est_size;
   rmse = rmse.array().sqrt();
-
+  return rmse;
 }
 
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
@@ -38,10 +37,10 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
   MatrixXd Hj(3,4);
 	//recover state parameters
-  double px = x_state[0]*cos(x_state[1]);
-  double py = x_state[0]*sin(x_state[1]);
-  double vx = x_state[2]*cos(x_state[1]);
-  double vy = x_state[2]*sin(x_state[1]);
+  double px = x_state[0];
+  double py = x_state[1];
+  double vx = x_state[2];
+  double vy = x_state[3];
 
 	//pre-compute a set of terms to avoid repeated calculation
 	float c1 = px*px+py*py;

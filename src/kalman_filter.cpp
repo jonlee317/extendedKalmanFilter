@@ -19,7 +19,6 @@ void KalmanFilter::Predict() {
   TODO:
     * predict the state
   */
-
   x_ = F_*x_; //TODO:  WHere does u come from?  I guess we don't need it
   P_ = F_*P_*F_.transpose()+Q_;
 
@@ -30,10 +29,10 @@ void KalmanFilter::Update(const VectorXd &z) {
   TODO:
     * update the state by using Kalman Filter equations
   */
-
+  MatrixXd PHt = P_*H_.transpose();
   VectorXd y = z - H_*x_;  // H*x is the measurement prediction of z
-  MatrixXd S = H_*P_*H_.transpose() + R_;
-  MatrixXd K = P_*H_.transpose()*S.inverse();
+  MatrixXd S = H_*PHt + R_;
+  MatrixXd K = PHt*S.inverse();
 
   x_ = x_ + K*y;
   MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
@@ -55,15 +54,15 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     theta = atan(x_[1]/x_[0]);
     rho_dot = ((x_[0]*x_[2]+x_[1]*x_[3])/rho);
   } else {
-    theta = 0;
-    rho_dot = 0;
+    return;
   }
 
   z_pred << rho, theta, rho_dot;
 
+  MatrixXd PHt = P_*H_.transpose();
   VectorXd y = z - z_pred;  // z_pred is the measurement prediction of z
-  MatrixXd S = H_*P_*H_.transpose() + R_;
-  MatrixXd K = P_*H_.transpose()*S.inverse();
+  MatrixXd S = H_*PHt + R_;
+  MatrixXd K = PHt*S.inverse();
 
   x_ = x_ + K*y;
   MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
